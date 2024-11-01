@@ -1,6 +1,8 @@
 const File = require("../models/file");
 const cloudinary = require("cloudinary").v2;
 const ImageUrl = require("../models/image-url-model")
+const LocationDetails = require('../models/location-details-model')
+const jwt = require('jsonwebtoken')
 
 //create handler funtionlocal file upload 
 //clieant ke path se media fetch krta => us media ko server ke ekpath par rakh deta,,upload kar deta
@@ -98,6 +100,118 @@ exports.imageUpload = async (req,res) => {
                   email,
                   imageUrl:response.secure_url,
             });
+
+
+            //................................................................................
+            const secret_key = process.env.JWT_SECRET;
+            const Coki = req.headers.cookie;
+            const t2 = Coki.split(";")[1];
+            const token2 = t2.split("=")[1];
+
+
+
+            // //decode............
+                  const decoded = jwt.verify(token2, secret_key  ); // Replace with your actual secret key
+                  console.log("decoded - > ", decoded);
+
+                  let currLocationId = decoded.currentLocationId;
+
+            //       // let locationId = currLocationId;
+
+
+
+
+
+
+
+
+
+
+            // const url = response.secure_url;
+
+            // // create imageurl model .......
+        
+            // const ImageUrlModel1 = await ImageUrl.create({
+            //     url
+            // })
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+            // const locaD = await LocationDetails.findOneAndUpdate({locationId:currLocationId} , {
+            //     "$push":{
+            //         imageUrls:ImageUrlModel1._id,
+            //     }
+            // });
+            // console.log("lacD -> ",locaD);
+        
+
+            
+    const url = response.secure_url
+
+    // create imageurl model .......
+
+    const ImageUrlModel1 = await ImageUrl.create({
+        url
+    })
+
+    console.log("imajObj = > " ,  ImageUrlModel1 );
+
+
+
+
+
+
+
+
+
+
+    const locaD = await LocationDetails.findOneAndUpdate({locationId:currLocationId} , {
+        "$push":{
+            imageUrls:ImageUrlModel1._id,
+        }
+    });
+    console.log("lacD -> ",locaD);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            //............................................................................
 
 
             

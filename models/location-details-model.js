@@ -15,7 +15,11 @@ const locationDetailsSchema = new mongoose.Schema({
             type:mongoose.Schema.Types.ObjectId,
             ref:"ImageUrl",
         }
-    ]
+    ],
+    locationId:{
+        type:String,
+        required:true,
+    }
     
     
 });

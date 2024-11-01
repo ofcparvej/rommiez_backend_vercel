@@ -1,8 +1,12 @@
 const Location = require('../models/location-model')
+const mongoose = require('mongoose')
 require("dotenv").config();
 const jwt=require("jsonwebtoken");
 const User = require('../models/User')
 const LocationDetails = require("../models/location-details-model")
+const { ObjectId } = require('mongodb');
+const {Types} = require('mongoose')
+const ImageUrl = require('../models/image-url-model');
 
 exports.addLocation  = async (req,res) => {
 
@@ -27,22 +31,12 @@ exports.addLocation  = async (req,res) => {
 
      console.log("t1 => " , token1 )
 
-     
-    //  console.log("t2 => " , token2 )
-
-
-
-
-    //  const headerToken =  Coki.split("=" , ";")[1];  // string ...
-
-
 
      const secret_key = process.env.JWT_SECRET;
 
      let userEmail;
      let userId;
 
-    
 
 
      try {
@@ -135,56 +129,87 @@ exports.addLocationDetails  = async (req,res) => {
 
     const {description , expectedRent } = req.body;
 
-    const owner ={description , expectedRent };
+    const owner ={description , expectedRent }
 
-    console.log(owner);
-
-
-
-    const Coki = req.headers.cookie;
-    const headerToken =  Coki.split("=")[1];  // string ...
+    console.log("owner=>" , owner);
     const secret_key = process.env.JWT_SECRET;
+    const Coki = req.headers.cookie;
+    const t2 = Coki.split(";")[1];
+    const token2 = t2.split("=")[1];
 
-    let currLocationId;
-    // let userId;
+
+
 
    
-
-
     try {
        const decoded = jwt.verify(token2, secret_key  ); // Replace with your actual secret key
        console.log("decoded - > ", decoded);
 
        currLocationId = decoded.currentLocationId;
-       
 
-       // req.user = decoded; // Attach the decoded payload to the request object
-       // next();
+       let locationId = currLocationId;
 
-       const locationDetails = await Location.create({
-           locationAddress,
-           houseOwnerName,
-           contactNumber
+
+
+       const locationDetails = await LocationDetails.create({
+           description,
+           expectedRent,
+           locationId,
+           
        })
 
-       // console.log("mail" , userEmail , userId)
 
-
-       // locations[locationId] -> done
-       const found_user = await User.findByIdAndUpdate({ _id:userId } , {
+       const  location_details = await Location.findByIdAndUpdate({ _id:currLocationId } , {
            "$push":{
-               locations:location._id,
+            locationDetails:locationDetails._id,
            } 
        },
            {new:true}
-       )
+       );
+
+
+    //    console.log("loc_des=>" , location_details);
+
+
+
+
+    //    const  location_details2 = await Location.findByIdAndUpdate({ _id:currLocationId } , {
+    //    " $push":{
+         
+    //       " locationDetails.$[].imageUrls": {url:"parvejurl"},
+    //     } 
+    // },
+    //     {new:true}
+    // );
+
+    //*******************************INSERTING IMAGES TO LOCATIONDETAILS */
+
+    const url = "parvejUrl"
+
+    // create imageurl model .......
+
+    const ImageUrlModel1 = await ImageUrl.create({
+        url
+    })
 
 
 
 
 
 
-       
+
+
+
+
+    const locaD = await LocationDetails.findOneAndUpdate({locationId:currLocationId} , {
+        "$push":{
+            imageUrls:ImageUrlModel1._id,
+        }
+    });
+    console.log("lacD -> ",locaD);
+
+    //................................................................................................
+
 
 
    res.status(200).json({message:true});
@@ -206,3 +231,4 @@ exports.addLocationDetails  = async (req,res) => {
    
 
 }
+
