@@ -80,7 +80,8 @@ exports.addReview  = async (req,res) => {
 
     res.status(200).json({
         success:true,
-        user_review
+        user_review,
+        message:"added Reviews Api successfully"
 
     })
 
