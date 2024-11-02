@@ -1,7 +1,10 @@
 const mongoose = require ("mongoose");
 
 const profileSchema = new mongoose.Schema({
-    
+    studentName:{
+      type:String,
+      required:true,
+    },
     about:{
         type:String,
         trim:true,
@@ -9,6 +12,10 @@ const profileSchema = new mongoose.Schema({
     contactNumber:{
         type:String,
         trim:true,
+    },
+    email:{
+        type:String,
+        required:true
     }
     
 });

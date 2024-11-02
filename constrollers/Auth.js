@@ -131,8 +131,10 @@ exports.signUp = async (req,res) => {
         const hashedPassword = await bcrypt.hash(password , 10);
 
          const ProfileDetails =  await Profile.create({
+            studentName:firstName+ " " + lastName,
+            email:email,
             about:null,
-            contactNumber:null
+            contactNumber:contactNumber
          })
 
         const user1 = await User.create({   
