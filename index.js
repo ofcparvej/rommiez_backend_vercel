@@ -52,6 +52,7 @@ app.use(cookieParser());
 
 const Upload = require("./route/fileUpload")
 const Reviews = require('./route/review-routes')
+const College = require('./route/college-routes')
 
 
 //routes
@@ -59,6 +60,7 @@ app.use("/api/v1/auth" , userRoutes);
 app.use("/api/v1" , Upload);
 app.use("/api/v1/loc" , locationRoutes);
 app.use("/api/v1" , Reviews);
+app.use("/api/v1" , College);
 
 
 

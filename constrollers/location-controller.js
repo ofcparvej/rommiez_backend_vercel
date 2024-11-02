@@ -7,12 +7,13 @@ const LocationDetails = require("../models/location-details-model")
 const { ObjectId } = require('mongodb');
 const {Types} = require('mongoose')
 const ImageUrl = require('../models/image-url-model');
+const College = require('../models/college-model')
 
 exports.addLocation  = async (req,res) => {
 
-     const {locationAddress , houseOwnerName , contactNumber} = req.body;
+     const {locationAddress , houseOwnerName , contactNumber , collegeCode} = req.body;
 
-     const owner = {locationAddress , houseOwnerName , contactNumber};
+     const owner = {locationAddress , houseOwnerName , contactNumber , collegeCode};
 
      console.log(owner);
 
@@ -60,6 +61,16 @@ exports.addLocation  = async (req,res) => {
 
         // locations[locationId] -> done
         const found_user = await User.findByIdAndUpdate({ _id:userId } , {
+            "$push":{
+                locations:location._id,
+            } 
+        },
+            {new:true}
+        )
+
+
+
+        const found_user2 = await College.findOneAndUpdate({ collegeCode:collegeCode } , {
             "$push":{
                 locations:location._id,
             } 
