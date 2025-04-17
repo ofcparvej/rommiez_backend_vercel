@@ -23,14 +23,14 @@ const userSchema = new mongoose.Schema({
     },
     accountType:{
         type:String,
-        enum:["Admin" , "Student" ],
+        enum:["Admin" , "Student" , "Contributor" ],
         required:true,
     },
     additionalDetails:{
         type:mongoose.Schema.Types.ObjectId,
         // required:true,
         ref:"Profile",                          // need to update only in profile ka controller...
-    },
+},
     locations:[
         {
         type:mongoose.Schema.Types.ObjectId,

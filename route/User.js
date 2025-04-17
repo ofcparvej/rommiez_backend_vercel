@@ -10,7 +10,5 @@ router.post("/signup",signUp);
 
 router.post("/sendotp",sendOtp);
 
-//....................
-
 
 module.exports = router;  

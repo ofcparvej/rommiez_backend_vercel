@@ -4,10 +4,9 @@ const otpGenarator = require("otp-generator");
 const Profile = require("../models/Profile");
 const bcrypt = require("bcrypt");
 const jwt=require("jsonwebtoken");
+require('dotenv').config();
 
-
-//Sendotp
-
+//otp
 exports.sendOtp = async (req,res) => {
 
 
@@ -60,7 +59,6 @@ exports.sendOtp = async (req,res) => {
        }
 
 
-
 }
 
 
@@ -68,11 +66,10 @@ exports.sendOtp = async (req,res) => {
 
 exports.signUp = async (req,res) => {
 
-  console.log("nO ErroR");
+  // console.log("nO ErroR");
 
     try {
     
-        //data fetch..
         const {
             firstName,
             lastName,
@@ -81,11 +78,20 @@ exports.signUp = async (req,res) => {
             confirmedPassword,
             accountType,
             contactNumber,
-            otp
+            otp,
+            key
         } = req.body;
 
+        if(accountType === 'Admin' ){
+          if(key !=process.env.ADMIN_KEY ){
+            return res.status(400).json({
+              success:false,
+              message:'Admin Key is Not valid'
+            })
+          }
+          
+        }
 
-        
         if(!firstName && ! email && !password && !confirmedPassword && !otp){
           return res.status(404).json({
             success:false,
@@ -93,14 +99,12 @@ exports.signUp = async (req,res) => {
           })
         }
 
-
         if(password != confirmedPassword ) {
             return res.status(400).json({
                 success:false,
                 message:"password invalid not matched",
             })
         }
-
 
         const existingUser = await User.findOne({email});
         if(existingUser){
@@ -110,6 +114,13 @@ exports.signUp = async (req,res) => {
             })
         }
 
+        const existingProfile = await Profile.findOne({email});
+        if(existingProfile){
+            return res.status(400).json({
+                success:false,
+                message:"already exists Profile",
+            })
+        }
 
         const recentOtp = await OTP.findOne({email}).sort({createdAt:-1}).limit(1);
         if(!recentOtp) {  
@@ -127,13 +138,11 @@ exports.signUp = async (req,res) => {
             })
         }
     
-
         const hashedPassword = await bcrypt.hash(password , 10);
 
          const ProfileDetails =  await Profile.create({
-            studentName:firstName+ " " + lastName,
+            name:firstName+ " " + lastName,
             email:email,
-            about:null,
             contactNumber:contactNumber
          })
 
@@ -143,22 +152,19 @@ exports.signUp = async (req,res) => {
             email,
             contactNumber,
             password:hashedPassword,
-            accountType:"Admin",
+            accountType:accountType,
             additionalDetails:ProfileDetails._id,
            
         });
 
-
-        console.log("user->" , user1);
-
+        // console.log("user->" , user1);
 
       res
       .status(200)
       .json({
-        message:"User created successfully...",
+        message:"User created successfully.",
         user1,
       });
-
 
 
     }catch (error) {
@@ -166,7 +172,7 @@ exports.signUp = async (req,res) => {
          console.log(error);
           res.status(400).json({
             success:false,
-            message:"error in signing up msg",
+            message:"Error in signing up msg",
          })
 
     }
@@ -180,18 +186,15 @@ exports.signIn = async (req,res) => {
 
     try {    
 
-     
       const {email , password} =req.body;
-
       //validate
       if(!email || !password ){
         return res.status(403).json({
             success:false,
-            message:"all fiealds required",
+            message:"All fiealds required",
         })
     }
       
-    
       const user2 = await User.findOne({email:email});
 
       if(await bcrypt.compare(password , user2.password)){
@@ -203,6 +206,8 @@ exports.signIn = async (req,res) => {
             currentLocationId:""
         }
 
+        const  accountType = user2.accountType;
+
         const token = jwt.sign(payload , process.env.JWT_SECRET , {
             expiresIn:"2h",
         });
@@ -210,60 +215,35 @@ exports.signIn = async (req,res) => {
         user2.token = token;
         user2.password=undefined;
 
-        //create cookie and send res
+        const options = {
+          expires:new Date(Date.now() + 3*24*60*60*1000),
+          httpOnly:true,
+        }
 
-      const options = {
-        expires:new Date(Date.now() + 3*24*60*60*1000),
-        httpOnly:true,
-      }
-
-
-
-      res.cookie("token" , token , options).status(200).json({
-        success:true,
-        message:"loggedIn succesfully",
-        token,
-      })
-
-
+        res.cookie("token1" , token , options).status(200).json({
+          success:true,
+          message:"Logged In succesfully",
+          email,
+          accountType,
+          token,
+        })
 
       } else {
         return res.status(400).json({
             success:false,
-            message:"not matched in bcrypt",
+            message:"Not matched in bcrypt",
         })
       }
 
-     
     } catch (error) {
 
-   console.log("error in login");
-   console.log(error);
-   res.status(401).json({
-   success:false,
-   message:"error in login",
-   });
+    console.log("Error in login");
+    console.log(error);
+    res.status(401).json({
+    success:false,
+    message:"Error in login",
+    });
 
     }
-    
-
 }
 
-//Change Passwaord hw.....
-// exports.changePassword = async (req,res,next) => {
-//     //fetch data
-   
-//     //get old pass , new pass ,consrirmPassword
-
-
-//     //validation pass==0 or not matched
-
-
-//     // update pass in db
-
-
-//     //send mail - pass update
-
-
-//     //return response...
-// }

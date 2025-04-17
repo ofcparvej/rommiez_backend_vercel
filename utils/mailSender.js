@@ -13,8 +13,6 @@ const mailSender = async (email,title,body) => {
             }
         })
 
-
-
         //send 
         let info = await transporter.sendMail({
             from:"from  Bhai ",
@@ -25,10 +23,6 @@ const mailSender = async (email,title,body) => {
 
         console.log("mail info::", info);
         return info;
-
-
-
-
 
     } catch(error) {
         console.log("error in mailSender");

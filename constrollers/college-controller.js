@@ -14,61 +14,7 @@ exports.addCollege  = async (req,res) => {
         address
         } = req.body;
 
-    const owner = {
-        collegeName,
-        collegeCode,
-        collegeEmail,
-        address};
-
-    console.log("College = >>>",owner);
-
-
-
-
-    // const secret_key = process.env.JWT_SECRET;
-
-    // let userEmail;
-    // let userId;
-    let locId;
-
-    const secret_key = process.env.JWT_SECRET;
-    const Coki = req.headers.cookie;
-
-    // token for user
-
-     const t1 = Coki.split(";")[0];
-     const token1 = t1.split("=")[1];
-
-
-
-    // token for location
-     const t2 = Coki.split(";")[1];
-     const token2 = t2.split("=")[1];
-
-
-   
-
-
-
-
     try {
-    //    const decoded = jwt.verify(token1, secret_key  ); // Replace with your actual secret key
-    //    console.log("decoded - > ", decoded);
-
-    //    userEmail = decoded.email;
-    //    userId = decoded.id;
-
-
-       //........................
-
-       const decoded_loc = jwt.verify(token2, secret_key  ); // Replace with your actual secret key
-       console.log("decoded_loc - > ", decoded_loc);
-
-       
-       locId = decoded_loc.id;
-
-       // req.user = decoded; // Attach the decoded payload to the request object
-       // next();
 
        const new_college = await College.create({
         collegeName,
@@ -77,140 +23,119 @@ exports.addCollege  = async (req,res) => {
         address
        })
 
+        res.status(200).json({
+            success:true,
+            new_college,
+            message:"college created successfully"
 
-
-    //    const new_created_college = await Location.findByIdAndUpdate({ _id:locId } , {
-    //     "$push":{
-    //         Reviews:user_review._id,
-    //     } 
-    // },
-    //     {new:true}
-    // )
-
-
-    res.status(200).json({
-        success:true,
-        new_college,
-        message:"college created successfully"
-
-    })
-
-
-
-
-
-
-        
-
-
-
-      
-
+        })
 
      } catch (err) {
-       console.log(err);
-       return res.status(403).json({ message: 'Invalid token 2' , error:err });
-     }
-
+        console.log(err);
+        return res.status(403).json({ message: 'Invalid token 2' , error:err });
+    }
 
 }
 
 
 
-// exports.addLocationToCollege  = async (req,res) => {
+exports.getCollegeDetails  = async (req,res) => {
 
-//     console.log("Inside Review controller ----");
+    const {collegeCode} = req.query;
+    console.log("collgCode  =>" , collegeCode);
 
-//     const {
-//         collegeName,
-//         collegeCode,
-//         collegeEmail,
-//         address
-//         } = req.body;
+    try {
 
-//     // const owner = {
-//     //     collegeName,
-//     //     collegeCode,
-//     //     collegeEmail,
-//     //     address};
+        const found_details = await College.findOne({collegeCode:collegeCode})
+        console.log("found_details = " , found_details);
 
-//     // console.log(owner);
+        res.status(200).json({
+            success:true,
+            found_details,
+            message:"college Details"
+        })
 
-//     const found_college = await College
+     } catch (err) {
+        console.log(err);
+        return res.status(403).json({ message: 'Invalid token 2' , error:err });
+    }
 
-
-
-
-//     // const secret_key = process.env.JWT_SECRET;
-
-//     // let userEmail;
-//     // let userId;
-//     let locId;
-
-//     const secret_key = process.env.JWT_SECRET;
-//     const Coki = req.headers.cookie;
-
-//     // token for user
-
-//      const t1 = Coki.split(";")[0];
-//      const token1 = t1.split("=")[1];
+}
 
 
+exports.getColleges  = async (req,res) => {
 
-//     // token for location
-//      const t2 = Coki.split(";")[1];
-//      const token2 = t2.split("=")[1];
+    const {collegeCode} = req.query;
+    console.log("collgCode  =>" , collegeCode);
 
+    try {
 
-   
+        const found_colleges = await College.find({});
+        console.log("found_details colleges = " , found_colleges);
 
+        res.status(200).json({
+            success:true,
+            found_colleges,
+            message:"college Details"
+        })
 
-
-
-//     try {
-
-//         // const found_college = await College.findOne
-//         const found_college = await College.find
-
-
-
-
-   
-
-
-
-//     //    const new_created_college_location = await College.findByIdAndUpdate({ _id:locId } , {
-//     //     "$push":{
-//     //         Reviews:user_review._id,
-//     //     } 
-//     // },
-//     //     {new:true}
-//     // )
+     } catch (err) {
+        console.log(err);
+        return res.status(403).json({ message: 'Error in College' , error:err });
+    }
 
 
-//     res.status(200).json({
-//         success:true,
-//         new_college,
-//         message:"location added to college  successfully"
+}
 
-//     })
+
+exports.addCollegeLogo  = async (req,res) => {
+
+    const LogoUrl = req.body.LogoUrl;
+    const collegeCode = req.body.collegeCode;
+
+    try {
+
+        const updatedCollege = await College.findOneAndUpdate({collegeCode:collegeCode},{collegeImgUrl:LogoUrl} , {new:true})
+
+        res.status(200).json({
+            success:true,
+            updatedCollege,
+            message:"college Logo Details"
+
+        })
+
+     } catch (err) {
+        console.log(err);
+        return res.status(403).json({ message: 'Error in College' , error:err });
+    }
+
+}
 
 
 
+//........tody ................
+
+exports.getCollegeAddress  = async (req,res) => {
+
+    let clgCode = req.query.collegeCode;
+
+    try {
+
+        const found_collegeAdd = await College.find({collegeCode:clgCode});
+        console.log("found_details colleges = " , found_collegeAdd);
+
+        res.status(200).json({
+            success:true,
+            found_collegeAdd,
+            message:"college Details Address"
+        })
+
+     } catch (err) {
+       console.log(err);
+       return res.status(403).json({ message: 'Error in College' , error:err });
+
+    }
+
+}
 
 
-
-        
-
-
-
-      
-
-
-//      } catch (err) {
-//        console.log(err);
-//        return res.status(403).json({ message: 'Invalid token 2' , error:err });
-//      }
-
-
-// }

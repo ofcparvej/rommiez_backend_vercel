@@ -24,8 +24,10 @@ const collegeSchema = new mongoose.Schema({
         ref:"Location",
         }
     ],
+    collegeImgUrl:{
+        type:String,
+    }
 
-    
 })
 
 module.exports = mongoose.model("College",collegeSchema);
