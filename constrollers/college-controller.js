@@ -1,6 +1,7 @@
 const College = require('../models/college-model')
 const jwt=require("jsonwebtoken");
 const Location = require('../models/location-model')
+// const dbConnect = require("../lib/dbConnect")
 
 
 exports.addCollege  = async (req,res) => {

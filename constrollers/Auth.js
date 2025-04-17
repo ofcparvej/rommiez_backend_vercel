@@ -5,6 +5,7 @@ const Profile = require("../models/Profile");
 const bcrypt = require("bcrypt");
 const jwt=require("jsonwebtoken");
 require('dotenv').config();
+const dbConnect = require("../lib/dbConnect")
 
 //otp
 exports.sendOtp = async (req,res) => {
@@ -65,6 +66,7 @@ exports.sendOtp = async (req,res) => {
 //signUp
 
 exports.signUp = async (req,res) => {
+  await dbConnect();
 
   // console.log("nO ErroR");
 
@@ -181,6 +183,7 @@ exports.signUp = async (req,res) => {
 //Login
 
 exports.signIn = async (req,res) => {
+  await dbConnect();
 
   console.log("inside login ");
 
