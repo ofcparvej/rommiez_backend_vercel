@@ -3,10 +3,12 @@ const app = express();
 var cors = require('cors')
 app.use(cors())
 const serverless = require('serverless-http');
+// const dbConnec = require("../lib/dbConnect")
 
 const bodyParser = require('body-parser');
 const userRoutes = require("../route/User");
 const locationRoutes = require('../route/location-routes');
+// dbConnec();
 
 
 const cookieParser = require("cookie-parser");                                               //fronend ki request enterten karenga bakend me using cors
