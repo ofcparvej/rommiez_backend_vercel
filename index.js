@@ -3,16 +3,16 @@ const app = express();
 var cors = require('cors')
 app.use(cors())
 const serverless = require('serverless-http');
-const dbConnec = require("../lib/dbConnect")
+const dbConnec = require("./lib/dbConnect")
 
 const bodyParser = require('body-parser');
-const userRoutes = require("../route/User");
-const locationRoutes = require('../route/location-routes');
+const userRoutes = require("./route/User");
+const locationRoutes = require('./route/location-routes');
 dbConnec();
 
 
 const cookieParser = require("cookie-parser");                                               //fronend ki request enterten karenga bakend me using cors
-const {cloudinaryConnect} = require("../config/cloudinary");
+const {cloudinaryConnect} = require("./config/cloudinary");
 cloudinaryConnect();
 
 
@@ -28,7 +28,7 @@ app.use(fileUpload({
 
 require('dotenv').config();
 const PORT=process.env.PORT || 8000;   
-require("../config/dataBase").connect();
+require("./config/dataBase").connect();
 
 
 app.use(bodyParser.json({ limit: '50mb' }));
@@ -55,8 +55,8 @@ app.use(cookieParser());
 // )
 
 
-const Upload = require("../route/fileUpload")
-const College = require('../route/college-routes')
+const Upload = require("./route/fileUpload")
+const College = require('./route/college-routes')
 
 
 //routes
