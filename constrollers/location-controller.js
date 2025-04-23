@@ -101,6 +101,8 @@ exports.addLocationDetails  = async (req,res) => {
         currLocationId = decoded.currentLocationId;
         let locationId = currLocationId;
 
+        console.log("DEcoded Id------------------------------------------------------------->"  ,locationId );
+
         const locationDetails = await LocationDetails.create({
             locationId,
         })
