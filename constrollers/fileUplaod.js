@@ -65,6 +65,7 @@ exports.addInDb = async (req,res) => {
 
             res.json({
                   success:true,
+                  fileData,
                   message:"Image successfully added in database",
             })
 
