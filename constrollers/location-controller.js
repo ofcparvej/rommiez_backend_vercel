@@ -195,6 +195,7 @@ exports.getLocationImages  = async (req,res) => {
 
         const img_urll =  await ImageUrl.find({_id:URLS[1]});
         urlsArr.push(img_urll[0].url);
+        
 
         res.status(200).json({message:"this is LOCimgs", currLocId , urlsArr  , foundLoc });
 
