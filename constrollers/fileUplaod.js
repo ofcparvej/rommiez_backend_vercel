@@ -32,6 +32,8 @@ exports.imageUpload = async (req,res) => {
 
 exports.addInDb = async (req,res) => {
 
+      console.log("INSIDE ADD IMG URL IN DB------------------------------------------------------------------------------------------>");
+
 
       const  found_url = req.body.url;
       const t2 = req.body.t2;
