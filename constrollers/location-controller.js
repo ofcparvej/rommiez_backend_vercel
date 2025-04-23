@@ -38,6 +38,7 @@ exports.addLocation  = async (req,res) => {
             contributorEmailId
         })
 
+        console.log("INTSIDE ADD LOCATION ----------------->")
         // locations[locationId] -> done
         const found_user = await User.findByIdAndUpdate({ _id:userId } , {
             "$push":{
