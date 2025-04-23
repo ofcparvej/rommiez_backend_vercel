@@ -38,7 +38,7 @@ exports.addLocation  = async (req,res) => {
             contributorEmailId
         })
 
-        console.log("INTSIDE ADD LOCATION ----------------->")
+        // console.log("INTSIDE ADD LOCATION ----------------->")
         // locations[locationId] -> done
         const found_user = await User.findByIdAndUpdate({ _id:userId } , {
             "$push":{
@@ -97,11 +97,11 @@ exports.addLocationDetails  = async (req,res) => {
     try {
 
         const decoded = jwt.verify(token2, secret_key  ); // Replace with your actual secret key
-        console.log("decoded - > ", decoded);
+        // console.log("decoded - > ", decoded);
         currLocationId = decoded.currentLocationId;
         let locationId = currLocationId;
 
-        console.log("DEcoded Id------------------------------------------------------------->"  ,locationId );
+        // console.log("DEcoded Id------------------------------------------------------------->"  ,locationId );
 
         const locationDetails = await LocationDetails.create({
             locationId,
@@ -174,6 +174,8 @@ exports.getLocationImages  = async (req,res) => {
     let URLS = [];
     let urlsArr = [];
 
+    // console.log("INSIDE img controller ------>")
+
 
     try {
 
@@ -206,7 +208,7 @@ exports.getLocationImages  = async (req,res) => {
 
 exports.updateStatus  = async (req,res) => {
 
-    console.log("Update status Controller => " , req.body);
+    // console.log("Update status Controller => " , req.body);
     const currLocationId = req.body.locId
     const isAvail = req.body.isChecked
 
@@ -234,7 +236,7 @@ exports.updateStatus  = async (req,res) => {
 
 exports.getAllDetails  = async (req,res) => {
 
-    console.log("Get All Controller =>" , req.query.collegeCode);
+    // console.log("Get All Controller =>" , req.query.collegeCode);
     let clgCode= req.query.collegeCode
 
     try {
@@ -260,14 +262,14 @@ exports.getAllDetails  = async (req,res) => {
 
 exports.getStatus  = async (req,res) => {
 
-    console.log("Update status Controller => " , req.body);
+    // console.log("Update status Controller => " , req.body);
     const currLocationId = req.body.locId
     let foundStatus = false;
 
     try {
 
         const  foundLoc = await Location.findByIdAndUpdate({ _id:currLocationId });
-        console.log("FoundLoc => -> " , foundLoc)
+        // console.log("FoundLoc => -> " , foundLoc)
  
         res.status(200).json({
             success:true,
@@ -286,7 +288,7 @@ exports.getStatus  = async (req,res) => {
 
 exports.removeLocation  = async (req,res) => {
 
-        console.log("REMOVE LOCATION CONTROLLER --------------" , req.body.locId)
+        // console.log("REMOVE LOCATION CONTROLLER --------------" , req.body.locId)
         let locId = req.body.locId;
         let clgCode = '1002'
 
