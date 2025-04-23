@@ -185,7 +185,7 @@ exports.signUp = async (req,res) => {
 exports.signIn = async (req,res) => {
   await dbConnect();
 
-  console.log("inside login ");
+  // console.log("inside login ");
 
     try {    
 
@@ -240,7 +240,7 @@ exports.signIn = async (req,res) => {
 
     } catch (error) {
 
-    console.log("Error in login");
+    // console.log("Error in login");
     console.log(error);
     res.status(401).json({
     success:false,

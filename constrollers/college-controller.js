@@ -6,7 +6,7 @@ const Location = require('../models/location-model')
 
 exports.addCollege  = async (req,res) => {
 
-    console.log("Inside College controller ----");
+    // console.log("Inside College controller ----");
 
     const {
         collegeName,
@@ -43,12 +43,12 @@ exports.addCollege  = async (req,res) => {
 exports.getCollegeDetails  = async (req,res) => {
 
     const {collegeCode} = req.query;
-    console.log("collgCode  =>" , collegeCode);
+    // console.log("collgCode  =>" , collegeCode);
 
     try {
 
         const found_details = await College.findOne({collegeCode:collegeCode})
-        console.log("found_details = " , found_details);
+        // console.log("found_details = " , found_details);
 
         res.status(200).json({
             success:true,
@@ -67,12 +67,12 @@ exports.getCollegeDetails  = async (req,res) => {
 exports.getColleges  = async (req,res) => {
 
     const {collegeCode} = req.query;
-    console.log("collgCode  =>" , collegeCode);
+    // console.log("collgCode  =>" , collegeCode);
 
     try {
 
         const found_colleges = await College.find({});
-        console.log("found_details colleges = " , found_colleges);
+        // console.log("found_details colleges = " , found_colleges);
 
         res.status(200).json({
             success:true,
@@ -123,7 +123,7 @@ exports.getCollegeAddress  = async (req,res) => {
     try {
 
         const found_collegeAdd = await College.find({collegeCode:clgCode});
-        console.log("found_details colleges = " , found_collegeAdd);
+        // console.log("found_details colleges = " , found_collegeAdd);
 
         res.status(200).json({
             success:true,
