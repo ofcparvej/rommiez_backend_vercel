@@ -10,7 +10,7 @@ exports.addLocation  = async (req,res) => {
 
 
 
-    const {locationAddress , houseOwnerName , contactNumber , collegeCode , token11 , expectedRent , description , foundDistance , lat , lng , contributorEmailId} = req.body;
+    const {locationAddress , houseOwnerName , contactNumber , collegeCode , token11 , expectedRent , description , foundDistance , lat , lng , contributorName , contributorContactNumber } = req.body;
     const token1 = token11;
     const secret_key = process.env.JWT_SECRET;
 
@@ -35,7 +35,9 @@ exports.addLocation  = async (req,res) => {
             distance,
             lat,
             lng,
-            contributorEmailId
+            contributorName,
+            contributorContactNumber
+
         })
 
         // console.log("INTSIDE ADD LOCATION ----------------->")

@@ -52,9 +52,12 @@ const locationSchema = new mongoose.Schema({
         type: Boolean,
         default:false
     },
-    contributorEmailId:{
+    contributorName:{
         type:String,
 
+    },
+        contributorContactNumber:{
+        type:String,
 
     }
     
